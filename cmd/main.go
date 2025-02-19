@@ -50,7 +50,7 @@ func loadConfig() (*convoai.ConvoAIConfig, error) {
 	// ElevenLabs TTS Configuration
 	if elKey := os.Getenv("ELEVENLABS_API_KEY"); elKey != "" {
 		config.ElevenLabsTTS = &convoai.ElevenLabsTTSConfig{
-			APIKey:  elKey,
+			Key:     elKey,
 			VoiceID: os.Getenv("ELEVENLABS_VOICE_ID"),
 			ModelID: os.Getenv("ELEVENLABS_MODEL_ID"),
 		}

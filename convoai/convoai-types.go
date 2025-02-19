@@ -137,16 +137,16 @@ type ConvoAIConfig struct {
 
 // MicrosoftTTSConfig holds Microsoft TTS specific configuration
 type MicrosoftTTSConfig struct {
-	Key       string
-	Region    string
-	VoiceName string
-	Rate      string
-	Volume    string
+	Key       string `json:"key"`
+	Region    string `json:"region"`
+	VoiceName string `json:"voice_name"`
+	Rate      string `json:"rate"`
+	Volume    string `json:"volume"`
 }
 
 // ElevenLabsTTSConfig holds ElevenLabs TTS specific configuration
 type ElevenLabsTTSConfig struct {
-	APIKey  string
-	VoiceID string
-	ModelID string
+	Key     string `json:"key"`
+	VoiceID string `json:"voice_id"`
+	ModelID string `json:"model_id"`
 }

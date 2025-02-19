@@ -59,7 +59,7 @@ func validateTTSConfig(config *convoai.ConvoAIConfig) error {
 		if config.ElevenLabsTTS == nil {
 			return errors.New("config error: ElevenLabs TTS configuration is missing")
 		}
-		if config.ElevenLabsTTS.APIKey == "" ||
+		if config.ElevenLabsTTS.Key == "" ||
 			config.ElevenLabsTTS.VoiceID == "" ||
 			config.ElevenLabsTTS.ModelID == "" {
 			return errors.New("config error: ElevenLabs TTS configuration is incomplete")

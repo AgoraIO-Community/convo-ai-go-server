@@ -62,7 +62,7 @@ func (s *ConvoAIService) getTTSConfig() (*TTSConfig, error) {
 
 	case string(TTSVendorElevenLabs):
 		if s.config.ElevenLabsTTS == nil ||
-			s.config.ElevenLabsTTS.APIKey == "" ||
+			s.config.ElevenLabsTTS.Key == "" ||
 			s.config.ElevenLabsTTS.ModelID == "" ||
 			s.config.ElevenLabsTTS.VoiceID == "" {
 			return nil, fmt.Errorf("missing ElevenLabs TTS configuration")
@@ -70,7 +70,7 @@ func (s *ConvoAIService) getTTSConfig() (*TTSConfig, error) {
 		return &TTSConfig{
 			Vendor: TTSVendorElevenLabs,
 			Params: map[string]interface{}{
-				"api_key":  s.config.ElevenLabsTTS.APIKey,
+				"api_key":  s.config.ElevenLabsTTS.Key,
 				"model_id": s.config.ElevenLabsTTS.ModelID,
 				"voice_id": s.config.ElevenLabsTTS.VoiceID,
 			},
