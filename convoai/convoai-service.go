@@ -7,14 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TokenGenerator is an interface for token generation services
+type TokenGenerator interface {
+	GenRtcToken(req token_service.TokenRequest) (string, error)
+}
+
 // ConvoAIService handles AI conversation functionality
 type ConvoAIService struct {
 	config       *ConvoAIConfig
-	tokenService *token_service.TokenService
+	tokenService TokenGenerator
 }
 
 // NewConvoAIService creates a new ConvoAIService instance
-func NewConvoAIService(config *ConvoAIConfig, tokenService *token_service.TokenService) *ConvoAIService {
+func NewConvoAIService(config *ConvoAIConfig, tokenService TokenGenerator) *ConvoAIService {
 	return &ConvoAIService{
 		config:       config,
 		tokenService: tokenService,

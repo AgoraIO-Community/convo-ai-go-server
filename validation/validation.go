@@ -72,6 +72,11 @@ func validateTTSConfig(config *convoai.ConvoAIConfig) error {
 
 // Checks if the modalities string is properly formatted
 func validateModalities(modalities string) bool {
+	// Empty string is valid (will use defaults)
+	if modalities == "" {
+		return true
+	}
+	
 	// map of valid modalities
 	validModalities := map[string]bool{
 		"text":  true,
