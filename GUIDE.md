@@ -1476,6 +1476,8 @@ ELEVENLABS_MODEL_ID=eleven_monolingual_v1
 
 Congratulations! You've built a Go server that integrates with Agora's Conversational AI Engine. Take this microservice and integrate it with your existing Agora backends.
 
-For more information about [Agora's Conversational AI Engine](https://www.agora.io/en/products/conversational-ai-engine/) check out the [official documentation](https://docs.agora.io/en/).
+For more information about [Agora's Conversational AI Engine](https://www.agora.io/en/products/conversational-ai-engine/) check out the [official documentation](https://docs.agora.io/en/conversational-ai/overview/product-overview).
+
+For the full source code, check out the [GitHub repository](https://github.com/AgoraIO-Community/convo-ai-go-server).
 
 Happy building!
