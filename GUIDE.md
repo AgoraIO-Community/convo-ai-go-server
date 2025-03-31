@@ -1,4 +1,4 @@
-# Building a Go Server for Agora Conversational AI
+# Build an Agora Conversational AI Service using Golang
 
 Conversational AI is revolutionizing how people interact with artificial intelligence. Instead of carefully crafting text prompts, users can have natural, real-time voice conversations with AI agents. This opens exciting opportunities for more intuitive and efficient interactions.
 
@@ -11,8 +11,8 @@ In this guide, I'll walk you through building a Go server that handles the conne
 Before getting started, make sure you have:
 
 - Go (version 1.18 or higher)
-- Basic knowledge of Go and Gin framework
-- [An Agora account](https://console.agora.io/) - _first 10k minutes each month are free_
+- Basic knowledge of Go and the Gin framework
+- [An Agora account](https://console.agora.io/) - _the first 10k minutes each month are free_
 - Conversational AI service [activated on your AppID](https://console.agora.io/)
 
 ## Project Setup
@@ -33,7 +33,7 @@ go get github.com/joho/godotenv
 go get github.com/AgoraIO-Community/go-tokenbuilder
 ```
 
-As we go through this guide, we'll create the necessary files and directories for our project. Let's create the initial directory structure:
+Create the initial directory structure, and as we go through the guide, we'll fill these directories with the files we need.
 
 ```bash
 mkdir -p convoai token_service http_headers validation
@@ -54,9 +54,9 @@ Your project directory should now have a structure like this:
 
 ## Server Entry Point
 
-Let's start by setting up our main application file that will serve as the entry point for our server. We'll begin by creating a clean, well-organized structure that loads our environment variables, sets up the configuration, and initializes our router with the necessary middleware and routes.
+Start by setting up the main application file, which will be the entry point for our server. We'll then load the environment variables, set up the configuration, and initialize the router with the appropriate middleware and routes.
 
-Create the `main.go` file with the following content:
+Create the `main.go` file
 
 ```bash
 touch main.go
@@ -206,13 +206,21 @@ func Ping(c *gin.Context) {
 
 > **Note:** We are loading the PORT from the environment variables, it will default to `8080` if not set in your `.env` file.
 
-Let's test our basic Fastify app by running:
+Let's test our basic Go server by running:
 
 ```bash
-npm run dev
+go run main.go
 ```
 
-You should see "Server is running on port 8080" in your console. You can now visit `http://localhost:8080/ping` to verify the server is working.
+You should see "Server setup completed" and "- listening on port 8080" in your console. You can now visit <a href="http://localhost:8080/ping">http://localhost:8080/ping</a> to verify the server is working - you should see `{"message": "pong"}` as the response.
+
+To test the server using curl, run:
+
+```bash
+curl http://localhost:8080/ping
+```
+
+You should see the response: `{"message": "pong"}`.
 
 ## Type Definitions
 
@@ -379,7 +387,7 @@ type ElevenLabsTTSConfig struct {
 }
 ```
 
-These new types give some insight on all the parts we'll be assembling in the next steps. We'll take the client request, and use it to configure the AgoraStartRequest and send it to Agora's Conversational AI Engine. Agora's Convo AI engine will add the agent to the conversation.
+These new types give some insight into all the parts we'll be assembling in the next steps. We'll take the client request, and use it to configure the `AgoraStartRequest` and send it to Agora's Conversational AI Engine. Agora's Convo AI engine will add the agent to the conversation.
 
 ## ConvoAI Service
 
@@ -391,7 +399,7 @@ Create the `convoai-service.go` file:
 touch convoai/convoai-service.go
 ```
 
-Start with importing gin and the `agora-token` library, because we'll need to generate tokens for the agent. Then we'll register and setup the agent routes. These functions will validate the request before passing them to their respective handlers.
+Start with importing gin and the `agora-token` library, because we'll need to generate tokens for the agent. Then we'll register and set up the agent routes. These functions will validate the request before passing it to their respective handlers.
 
 ```go
 package convoai
@@ -475,7 +483,7 @@ func (s *ConvoAIService) RemoveAgent(c *gin.Context) {
 
 ## Invite Agent Handler
 
-Next we'll implement the invite handler, which needs to handle several key tasks:
+Next, we'll implement the invite handler, which needs to handle several key tasks:
 
 - Generate a token for the AI agent to access the RTC channel.
 - Configure Text-to-Speech (Microsoft or ElevenLabs)
@@ -663,7 +671,7 @@ func randomString(n int) string {
 
 ## Remove Agent Handler
 
-After the agent joins the conversation, we need a way to remove them from the conversation. This is where the remove handler comes in. It takes the agentID and sends a request to the Agora's Conversational AI Engine to remove the agent from the channel.
+After the agent joins the conversation, we need a way to remove them from the conversation. This is where the remove handler comes in. It takes the `agentID` and sends a request to the Agora's Conversational AI Engine to remove the agent from the channel.
 
 Create the file `convoai_handler_remove.go`:
 
@@ -720,9 +728,9 @@ func (s *ConvoAIService) HandleRemoveAgent(req RemoveAgentRequest) (*RemoveAgent
 
 ## Utility Functions
 
-In both the invite and remove routes we need to use BasicAuthorization in the headers of our requests, so we'll setup a utility function to handle this.
+In both the invite and remove routes, we need to use BasicAuthorization in the headers of our requests, so we'll set up a utility function to handle this.
 
-Another utility we need to build is the `getTTSConfig`. I need to call out, because normally you would have a single TTS config. For demo purposes I've built it this way to show how to implement the configs for all TTS vendors supported by Agora's Convo AI Engine.
+Another utility we need to build is the `getTTSConfig`. I need to call out, because normally you would have a single TTS config. For demo purposes, I've built it this way to show how to implement the configs for all TTS vendors supported by Agora's Convo AI Engine.
 
 Create the file `convoai-utils.go`:
 
@@ -842,7 +850,7 @@ func (s *ConvoAIService) validateRemoveRequest(req *RemoveAgentRequest) error {
 
 ## HTTP Headers
 
-To handle all header related logic, create the `httpHeaders.go` file:
+To handle all header-related logic, create the `httpHeaders.go` file:
 
 ```bash
 touch http_headers/httpHeaders.go
@@ -975,17 +983,17 @@ func setupServer() *http.Server {
 // Rest of the code remains the same...
 ```
 
-By now you have noticed that we added a token service that doesn't exist, ignot the error for now, becuse in the next step we'll implement the token service, which will make it easier to test and integrate with frontend applications.
+By now you've noticed that we added a token service that doesn't exist, ignore the error for now, becuse in the next step we'll implement the token service, which will make it easier to test and integrate with frontend applications.
 
 ## Token Generation
 
-In the `convoai-service` we use a token service, while you could tie this to your auth service and have it generate the tokens for completeness we'll implement a token service for both the convoai-service and our client apps if needed.
+In the `convoai-service` we use a token service. While you could tie this to your auth service and have it generate the tokens. For this guide, we'll implement a token service for both the `convoai-service` and our client apps if needed.
 
-Expalining this code is a bit outside the scope of this guide, but if you are new to tokens i would recommend checking out my guide [Building a Token Server for Agora Applications using Golang](https://www.agora.io/en/blog/how-to-build-a-token-server-using-golang/).
+Explaining this code is a bit outside the scope of this guide, but if you are new to tokens, I would recommend checking out my guide [Building a Token Server for Agora Applications using Golang](https://www.agora.io/en/blog/how-to-build-a-token-server-using-golang/).
 
 ## Token Service
 
-Create the tocken service and handler files:
+Create the token service and handler files:
 
 ```bash
 touch token_service/token-service.go
@@ -1177,7 +1185,7 @@ With the token generation in place, let's add some validation middleware to ensu
 
 ## Environment Validation
 
-Finally, let's create a validation utility to check that all required environment variables are set. Create the file `validation/validation.go`:
+Create a validation utility to check that all required environment variables are set. Create the file `validation/validation.go`:
 
 ```bash
 touch validation/validation.go
@@ -1375,7 +1383,7 @@ Expected response:
 
 ## Customizations
 
-Agora Conversational AI Engine supports a number of customizations.
+Agora Conversational AI Engine supports several customizations.
 
 ### Customizing the Agent
 
